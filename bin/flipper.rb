@@ -54,6 +54,7 @@ flipper.instance_eval do
 
   on("run") do
     if command = flipper.store.find(["tester", "command"])
+      puts command
       flipper.fire(command)
     else
       puts "how can I run I have no legs?"

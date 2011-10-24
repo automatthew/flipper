@@ -74,7 +74,7 @@ moldbug:~/projects/flipper $ bin/flipper.rb
     }
   }
 }
-<3: ! httperf --server=localhost --port=1337 --uri=/ --rate=30  --num-conns=50
+<3: run httperf --server=localhost --port=1337 --uri=/ --rate=30  --num-conns=50
   httperf: warning: open file limit > FD_SETSIZE; limiting max. # of open files to FD_SETSIZE
   httperf --client=0/1 --server=localhost --port=1337 --uri=/ --rate=30 --send-buffer=4096 --recv-buffer=16384 --num-conns=50 --num-calls=1
   Maximum connect burst length: 1
@@ -111,6 +111,7 @@ Stored results in /Users/mking/projects/flipper/flipper/0001.json
 }
 <3: tester.command = httperf --server=localhost --port=1337 --uri=/ --rate=30  --num-conns=10
 <3: run
+httperf --server=localhost --port=1337 --uri=/ --rate=30  --num-conns=50
   httperf: warning: open file limit > FD_SETSIZE; limiting max. # of open files to FD_SETSIZE
   httperf --client=0/1 --server=localhost --port=1337 --uri=/ --rate=30 --send-buffer=4096 --recv-buffer=16384 --num-conns=10 --num-calls=1
   Maximum connect burst length: 1
