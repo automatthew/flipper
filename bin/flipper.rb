@@ -25,7 +25,11 @@ flipper.instance_eval do
 
   on("reload") { flipper.store.load }
 
-  on(/^\!\s+(.*)$/) do |args|
+  on(/^\!\s*(.*)$/) do |args|
+    flipper.exec(args.first)
+  end
+
+  on(/run\s+(.*)$/) do |args|
     flipper.fire(args.first)
   end
 

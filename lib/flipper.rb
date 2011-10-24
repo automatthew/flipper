@@ -210,13 +210,30 @@ class Flipper
     if Readline.readline(" ", true) == "y"
       # save config to _base.json
       @store.save
-      puts "Saved current config to #{@store.base_file}"
+      puts "Saved current config"
       # create a new numbered file, saving in it the current
       # config and the results of the command
       @store.store(:stdout => stdout.join, :stderr => stderr.join)
     end
   end
   
+  def exec(command)
+    cmd = Open3.popen3(command) do |i, o, e|
+      i.close
+      t0 = Thread.new do
+        o.each_line do |line|
+          $stdout.puts "  " << line
+        end
+      end
+      t1 = Thread.new do
+        e.each_line do |line|
+          $stderr.puts "  " << line
+        end
+      end
+      t0.join
+      t1.join
+    end
+  end
 
   def on(*pattern, &block)
     pattern.flatten.each do |pattern|
