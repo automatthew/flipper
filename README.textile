@@ -99,8 +99,10 @@ Net I/O: 7.4 KB/s (0.1*10^6 bps)
 
 Errors: total 0 client-timo 0 socket-timo 0 connrefused 0 connreset 0
 Errors: fd-unavail 0 addrunavail 0 ftab-full 0 other 0
+
 Store results? (y/N) y
 Stored results in /Users/mking/projects/flipper/flipper/0001.json
+
 <3: show tester
 {
   "command": " httperf --server=localhost --port=1337 --uri=/ --rate=30  --num-conns=50",
