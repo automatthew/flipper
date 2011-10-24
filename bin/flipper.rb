@@ -25,7 +25,7 @@ flipper.instance_eval do
 
   on("reload") { flipper.store.load }
 
-  on(/^\!(.*)$/) do |args|
+  on(/^\!\s+(.*)$/) do |args|
     flipper.fire(args.first)
   end
 
@@ -39,8 +39,9 @@ flipper.instance_eval do
     end
   end
 
-  on(/=/) do |arg|
-    flipper.store.lineproc(arg)
+  on(/^([^!\s]+?)\s+=\s+(.+)$/) do |args|
+    flipper.store.set2(args[0], args[1])
+    #flipper.store.lineproc(arg)
   end
 
   on(/show (\S+)$/) do |args|

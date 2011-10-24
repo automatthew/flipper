@@ -16,7 +16,7 @@ load "#{$Here}/hash_tree.rb"
 
 class FlipperStore
 
-  attr_reader :completions
+  attr_reader :completions, :base_file
   def initialize(directory)
     @dir = File.expand_path(directory)
     FileUtils.mkdir_p(@dir)
@@ -101,6 +101,19 @@ class FlipperStore
     end
   end
 
+  def set2(key, val)
+	  bits = key.split(".")
+	  @config.create_path(bits) do |h,k|
+		  begin
+			  h[k] = val
+			  self.add_terms(key, val)
+		  rescue => e
+			  puts "Can't set #{key}: a value already exists"
+			  pp h
+		  end
+	  end
+  end
+
   def lineproc(line)
     key, val = line.chomp.split(/\s*=\s*/)
     if key
@@ -132,6 +145,7 @@ class FlipperStore
       f.puts(JSON.pretty_generate([@config, result]))
     end
     puts "Stored results in #{file}"
+    puts
   end
 
   def current_number
@@ -192,10 +206,11 @@ class Flipper
       t1.join
     end
 
-    print "Store results? (y/N)"
+    print "\nStore results? (y/N)"
     if Readline.readline(" ", true) == "y"
       # save config to _base.json
       @store.save
+      puts "Saved current config to #{@store.base_file}"
       # create a new numbered file, saving in it the current
       # config and the results of the command
       @store.store(:stdout => stdout.join, :stderr => stderr.join)
