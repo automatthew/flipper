@@ -1,12 +1,15 @@
 # stdlib
 require "pp"
 require "set"
-require "readline"
 require "open3"
 require "fileutils"
 
 # others
 require "rubygems"
+gem "rb-readline"
+require "readline"
+Readline.completion_append_character = nil
+
 require "json"
 
 # ours
@@ -162,20 +165,36 @@ class Flipper
     @store = FlipperStore.new(dir)
     @patterns = {}
     @commands = Set.new
+    @state = :rest
   end
 
-  def completion_proc
-    @cproc ||= lambda do |str|
-      bits = str.split(".")
-      if bits.size > 1
-        v1 = @store.completions.grep(/^#{Regexp.escape(str)}/)
-        v2 = @store.completions.grep(/^#{Regexp.escape(bits.last)}/)
-        (v1 + v2.map {|x| (bits.slice(0..-2) << x).join(".") }).uniq
-      else
-        @commands.grep(/^#{Regexp.escape(str)}/) + 
-        @store.completions.grep(/^#{Regexp.escape(str)}/)
-      end
+  def complete(str)
+    case Readline.line_buffer
+    when /^\s*!/
+      self.dir_complete(str)
+    else
+      self.term_complete(str)
     end
+  end
+
+  def term_complete(str)
+    bits = str.split(".")
+    if bits.size > 1
+      v1 = @store.completions.grep(/^#{Regexp.escape(str)}/)
+      v2 = @store.completions.grep(/^#{Regexp.escape(bits.last)}/)
+      (v1 + v2.map {|x| (bits.slice(0..-2) << x).join(".") }).uniq
+    else
+      self.command_complete(str) +
+        @store.completions.grep(/^#{Regexp.escape(str)}/)
+    end
+  end
+
+  def dir_complete(str)
+    Dir.glob("#{str}*")
+  end
+
+  def command_complete(str)
+    @commands.grep(/^#{Regexp.escape(str)}/) 
   end
 
   def sanitize(str)

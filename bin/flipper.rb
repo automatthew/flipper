@@ -65,7 +65,8 @@ flipper.instance_eval do
 end
 
 
-Readline.completion_proc = flipper.completion_proc
+Readline.completion_proc = flipper.method(:complete)
+#Readline.basic_word_break_characters = ""
 
 if ARGV.size > 0
   flipper.fire(ARGV.join(" "))
