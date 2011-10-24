@@ -213,7 +213,7 @@ class Flipper
       puts "Saved current config"
       # create a new numbered file, saving in it the current
       # config and the results of the command
-      @store.store(:stdout => stdout.join, :stderr => stderr.join)
+      @store.store(:timestamp => Time.now.to_i, :stdout => stdout.join, :stderr => stderr.join)
     end
   end
   
