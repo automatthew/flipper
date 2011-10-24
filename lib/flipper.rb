@@ -193,13 +193,13 @@ class Flipper
       t0 = Thread.new do
         o.each_line do |line|
           stdout << self.sanitize(line)
-          $stdout.puts line
+          $stdout.puts "  " << line
         end
       end
       t1 = Thread.new do
         e.each_line do |line|
           stderr << self.sanitize(line)
-          $stderr.puts line
+          $stderr.puts "  " << line
         end
       end
       t0.join
