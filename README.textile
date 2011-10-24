@@ -140,6 +140,11 @@ httperf --server=localhost --port=1337 --uri=/ --rate=30  --num-conns=50
 Store results? (y/N) y
 Stored results in /Users/mking/projects/flipper/flipper/0002.json
 
+<3: !ls flipper/
+  0001.json
+  0002.json
+  _base.json
+  _comp.json
 <3: quit
 
 </pre>
