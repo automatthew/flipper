@@ -1,7 +1,11 @@
 #!/usr/bin/env ruby
 
-here = File.expand_path(File.dirname(__FILE__))
-require "#{here}/../lib/flipper"
+# set up loadpath
+here = File.dirname(__FILE__)
+FLIPPER_ROOT = File.expand_path("#{here}/..")
+$LOAD_PATH.unshift("#{FLIPPER_ROOT}/lib")
+
+require "flipper"
 
 flipper = Flipper.new("#{Dir.pwd}/flipper")
 
@@ -39,12 +43,13 @@ flipper.instance_eval do
 
   on(/delete (.+)$/) do |args|
     args.each do |arg|
-      pp flipper.store.remove(*arg.split("."))
+      val = flipper.store.remove(*arg.split("."))
+      flipper.store.display(val)
     end
   end
 
   on(/^([^!\s]+?)\s+=\s+(.+)$/) do |args|
-    flipper.store.set2(args[0], args[1])
+    flipper.store.set(args[0], args[1])
     #flipper.store.lineproc(arg)
   end
 
@@ -64,9 +69,6 @@ flipper.instance_eval do
   end
 end
 
-
-Readline.completion_proc = flipper.method(:complete)
-#Readline.basic_word_break_characters = ""
 
 if ARGV.size > 0
   flipper.fire(ARGV.join(" "))
